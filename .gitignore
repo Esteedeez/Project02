@@ -1,0 +1,62 @@
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Scanner ;
+public class eBookSort {
+	public static void main(String[] args) {
+		String file = "input.txt";
+		Scanner inputStream = null ;
+		ArrayList<String> index = new ArrayList<String>(100) ;
+		int i  = 0 ;
+		try {
+			inputStream = new Scanner( new File(file) );
+
+		}   catch (FileNotFoundException e) {
+			System.out.print("THE FILE DOES NOT EXSIST!");
+			System.exit(0);
+		}
+		while(inputStream.hasNextLine()) {
+			String line = inputStream.nextLine();
+			index.add(line) ;
+			i++ ;
+		}
+		inputStream.close() ;
+		Quicksort(index,0,index.size() - 1) ;
+		for (int k = 0; k < index.size() - 1; k ++) {
+			System.out.println(index.get(k)) ;
+		}
+	}
+
+
+	public static void Quicksort(ArrayList<String> A, int p, int r) {
+		if (A.get(p).compareTo(A.get(r)) < 1) {
+			int q = Partition(A, p, r) ;
+			Quicksort(A, p, q-1) ;
+			Quicksort(A, q+r, r) ;
+		}
+
+	}
+	public static int Partition (ArrayList<String> A, int p, int r) {
+		String s = A.get(r) ;
+		int i = p - 1 ;
+		String temp = "" ;
+		for (int j = p; j < r ; j++ ) {
+			// if s is lexicographically after j
+			if (A.get(j).compareTo(s) < 1) {
+				i ++ ;
+				temp = A.get(j) ;
+				A.remove(j) ;
+				A.add(j,A.get(i)) ;
+				A.add(i,temp) ;
+			}
+		}
+	temp = A.get(i + 1) ;
+	A.remove(i + 1) ;
+	A.add(i + 1, A.get(r)) ;
+	A.add(r,temp) ;
+	return i + 1 ;
+	}
+
+
+}
