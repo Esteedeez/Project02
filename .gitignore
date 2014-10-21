@@ -74,9 +74,15 @@ public class eBookSort {
 		int j = to;
 		int foo = from+(to - from)/2 ;
 		String pivot = stringList.get(foo) ;
+		int piv = index.get(foo) ;
 		while(i <= j)
 		{
-			while(stringList.get(i).compareTo(pivot) < 0){i++;}
+			if ((stringList.get(i).compareTo(pivot) == 0 || stringList.get(j).compareTo(pivot) == 0)
+					&&(index.get(i) < index.get(j)) ){
+				swap(i,j) ;
+			}
+			while( (stringList.get(i).compareTo(pivot) < 0) || 
+			(stringList.get(i).compareTo(pivot) == 0 && index.get(i) < piv) ){i++;}
 						
 			while(stringList.get(j).compareTo(pivot) > 0){j--;}
 			if(i <= j)
@@ -85,6 +91,7 @@ public class eBookSort {
 				i++;
 				j--;
 			}
+
 		}
 		if(from < j)
 		{
