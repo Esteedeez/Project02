@@ -4,11 +4,13 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Scanner ;
 public class eBookSort {
+	public static ArrayList<Integer> index = new ArrayList<Integer>(100) ;
+	public static ArrayList<String> stringList = new ArrayList<String>();
 	public static void main(String[] args) {
 		String file = "input.txt";
 		Scanner inputStream = null ;
-		ArrayList<String> index = new ArrayList<String>(100) ;
-		int i  = 0 ;
+		ArrayList<Storage> list = new ArrayList<Storage>();
+		ArrayList<String> str = new ArrayList<String>();
 		try {
 			inputStream = new Scanner( new File(file) );
 
@@ -16,47 +18,126 @@ public class eBookSort {
 			System.out.print("THE FILE DOES NOT EXSIST!");
 			System.exit(0);
 		}
+		int i = 0 ;
 		while(inputStream.hasNextLine()) {
-			String line = inputStream.nextLine();
-			index.add(line) ;
+			
+			String aLine = inputStream.nextLine();
+			String[] strArray = aLine.split("\t");
+//			System.out.println("first " + strArray[0]);
+//			System.out.println("array length" + strArray.length);
+			if(strArray.length == 2)
+			{
+				String aString = strArray[0];
+				int aVal = Integer.parseInt(strArray[1]);
+				Storage one = new Storage(aString, aVal);
+				list.add(one);
+//				System.out.println("debug");
+			}
+//			index.add(line) ;
 			i++ ;
+			
 		}
 		inputStream.close() ;
-		Quicksort(index,0,index.size() - 1) ;
-		for (int k = 0; k < index.size() - 1; k ++) {
-			System.out.println(index.get(k)) ;
+		for(int m = 0; m < list.size() ; m++)
+		{
+			System.out.println(list.get(m).getString() );
+			str.add(list.get(m).getString());
+			index.add(list.get(m).getValue()) ;
+			}
+		System.out.println("length is "+str.size());
+		QuickSortS(str);
+		for(int m = 0; m < str.size() ; m++)
+		{
+			System.out.println(str.get(m) + "	" + index.get(m));
 		}
+
+	}
+
+	/*
+	 * Sorts the strings in storage
+	 */
+	public static void QuickSortS(ArrayList<String> initialValue){
+
+	    stringList=initialValue;
+	    sort(stringList, 1, stringList.size()-1);
+//	    System.out.println("debug");
+	}
+
+	public static void sort(ArrayList<String> namelist, int i, int j){
+		qsort(0, namelist.size()-1);
+	    
 	}
 
 
-	public static void Quicksort(ArrayList<String> A, int p, int r) {
-		if (A.get(p).compareTo(A.get(r)) < 1) {
-			int q = Partition(A, p, r) ;
-			Quicksort(A, p, q-1) ;
-			Quicksort(A, q+r, r) ;
-		}
-
-	}
-	public static int Partition (ArrayList<String> A, int p, int r) {
-		String s = A.get(r) ;
-		int i = p - 1 ;
-		String temp = "" ;
-		for (int j = p; j < r ; j++ ) {
-			// if s is lexicographically after j
-			if (A.get(j).compareTo(s) < 1) {
-				i ++ ;
-				temp = A.get(j) ;
-				A.remove(j) ;
-				A.add(j,A.get(i)) ;
-				A.add(i,temp) ;
+	private static void qsort(int from, int to){
+		int i = from;
+		int j = to;
+		int foo = from+(to - from)/2 ;
+		String pivot = stringList.get(foo) ;
+		while(i <= j)
+		{
+			while(stringList.get(i).compareTo(pivot) < 0){i++;}
+						
+			while(stringList.get(j).compareTo(pivot) > 0){j--;}
+			if(i <= j)
+			{
+				swap(i, j);
+				i++;
+				j--;
 			}
 		}
-	temp = A.get(i + 1) ;
-	A.remove(i + 1) ;
-	A.add(i + 1, A.get(r)) ;
-	A.add(r,temp) ;
-	return i + 1 ;
+		if(from < j)
+		{
+			qsort(from, j);
+		}
+		if(i < to)
+		{
+			qsort(i, to);
+		}
+		i = from ;
+		j = to ;
 	}
+	private static void swap (int i, int j){
+        
+	    String temp = stringList.get(i);
+	    int temp2 = index.get(i) ;
+	    stringList.set(i, stringList.get(j));
+	    stringList.set(j, temp);
+	    index.set(i, index.get(j)) ;
+	    index.set(j, temp2) ;
 
+	}
+	
+	public static void QuickSort(ArrayList<Integer> arr, int left, int right) {
+	      int index = partition(arr, left, right);
+	      if (left < index - 1)
+	            QuickSort(arr, left, index - 1);
+	      if (index < right)
+	            QuickSort(arr, index, right);
+	}
+	
+	public static int partition(ArrayList<Integer> arr, int left, int right)
+	{
+	      int i = left, j = right;
+	      int tmp;
+	      int pivot = (arr.get(left) + arr.get(right)) / 2;
+	     
+	      while (i <= j) {
+	            while (arr.get(i) < pivot)
+	                  i++;
+	            while (arr.get(j) > pivot)
+	                  j--;
+	            if (i <= j) {
+	                  tmp = arr.get(i);
+	                  arr.set(i, arr.get(j));
+	                  arr.set(j, tmp);
+	                  i++;
+	                  j--;
+	            }
+	      }
+	     
+	      return i;
+	}
+	
 
 }
