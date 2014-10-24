@@ -7,44 +7,43 @@ public class eBookSort {
 	public static ArrayList<Integer> index = new ArrayList<Integer>(100) ;
 	public static ArrayList<String> stringList = new ArrayList<String>();
 	public static void main(String[] args) {
+		//reads file
 		String file = "input.txt";
 		Scanner inputStream = null ;
 		ArrayList<Storage> list = new ArrayList<Storage>();
 		ArrayList<String> str = new ArrayList<String>();
+		/*try/catch in case file name is typed in wrong / does not exist.
+		 * 
+		 */
 		try {
 			inputStream = new Scanner( new File(file) );
 
 		}   catch (FileNotFoundException e) {
-			System.out.print("THE FILE DOES NOT EXSIST!");
+			System.out.print("THE FILE DOES NOT EXIST!");
 			System.exit(0);
 		}
 		int i = 0 ;
+		
 		while(inputStream.hasNextLine()) {
 			
 			String aLine = inputStream.nextLine();
 			String[] strArray = aLine.split("\t");
-//			System.out.println("first " + strArray[0]);
-//			System.out.println("array length" + strArray.length);
 			if(strArray.length == 2)
 			{
 				String aString = strArray[0];
 				int aVal = Integer.parseInt(strArray[1]);
 				Storage one = new Storage(aString, aVal);
 				list.add(one);
-//				System.out.println("debug");
 			}
-//			index.add(line) ;
 			i++ ;
 			
 		}
 		inputStream.close() ;
 		for(int m = 0; m < list.size() ; m++)
 		{
-			System.out.println(list.get(m).getString() );
 			str.add(list.get(m).getString());
 			index.add(list.get(m).getValue()) ;
 			}
-		System.out.println("length is "+str.size());
 		QuickSortS(str);
 		for(int m = 0; m < str.size() ; m++)
 		{
@@ -54,13 +53,12 @@ public class eBookSort {
 	}
 
 	/*
-	 * Sorts the strings in storage
+	 * Sorts the strings and corresponding ints in storage
 	 */
 	public static void QuickSortS(ArrayList<String> initialValue){
 
 	    stringList=initialValue;
 	    sort(stringList, 1, stringList.size()-1);
-//	    System.out.println("debug");
 	}
 
 	public static void sort(ArrayList<String> namelist, int i, int j){
@@ -68,7 +66,9 @@ public class eBookSort {
 	    
 	}
 
-
+/*Puts the strings in alphabetical order,  if the two strings are lexographically equal
+ * then it compares the integer values of the two strings and orders them in decreasing order
+ */
 	private static void qsort(int from, int to){
 		int i = from;
 		int j = to;
@@ -104,6 +104,9 @@ public class eBookSort {
 		i = from ;
 		j = to ;
 	}
+	/*swaps the string values in the stringList array, along with the
+	 *corresponding int value from the index array
+	 */
 	private static void swap (int i, int j){
         
 	    String temp = stringList.get(i);
@@ -114,15 +117,9 @@ public class eBookSort {
 	    index.set(j, temp2) ;
 
 	}
-	
-	public static void QuickSort(ArrayList<Integer> arr, int left, int right) {
-	      int index = partition(arr, left, right);
-	      if (left < index - 1)
-	            QuickSort(arr, left, index - 1);
-	      if (index < right)
-	            QuickSort(arr, index, right);
-	}
-	
+	/*partition method deduced from psuedocode in our book.
+	 * 
+	 */
 	public static int partition(ArrayList<Integer> arr, int left, int right)
 	{
 	      int i = left, j = right;
